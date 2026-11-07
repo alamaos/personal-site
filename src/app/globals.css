@@ -47,6 +47,28 @@ body::before {
   pointer-events: none;
 }
 
+/* Signature: fade-in and gentle rotation on load */
+@keyframes signature-fade {
+  from {
+    opacity: 0;
+    transform: rotate(-3deg) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-3deg) translateY(0);
+  }
+}
+.signature {
+  transform-origin: left center;
+  animation: signature-fade 1.4s ease-out 0.3s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .signature {
+    animation: none;
+    transform: rotate(-3deg);
+  }
+}
+
 /* Subtle film grain */
 body::after {
   content: "";

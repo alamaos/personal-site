@@ -56,11 +56,22 @@ export default function Home() {
         </div>
 
         <div
-          className="mt-10 inline-block font-script text-5xl text-accent sm:text-6xl"
-          style={{ transform: "rotate(-3deg)", transformOrigin: "left center" }}
-        >
-          — Oskari
-        </div>
+          role="img"
+          aria-label="Allekirjoitus: Oskari Alamäki"
+          className="signature mt-10 bg-accent"
+          style={{
+            width: "min(360px, 80%)",
+            aspectRatio: "1050 / 312",
+            maskImage: "url(/signature.png)",
+            maskSize: "contain",
+            maskRepeat: "no-repeat",
+            maskPosition: "left center",
+            WebkitMaskImage: "url(/signature.png)",
+            WebkitMaskSize: "contain",
+            WebkitMaskRepeat: "no-repeat",
+            WebkitMaskPosition: "left center",
+          }}
+        />
       </section>
 
       <section id="tyot" className="mt-24 sm:mt-32">
