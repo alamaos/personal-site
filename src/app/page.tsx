@@ -61,7 +61,7 @@ export default function Home() {
           className="signature mt-10 bg-accent"
           style={{
             width: "min(360px, 80%)",
-            aspectRatio: "1050 / 312",
+            aspectRatio: "1363 / 369",
             maskImage: "url(/signature.png)",
             maskSize: "contain",
             maskRepeat: "no-repeat",

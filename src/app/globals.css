@@ -61,6 +61,8 @@ body::before {
 .signature {
   transform-origin: left center;
   animation: signature-fade 1.4s ease-out 0.3s both;
+  filter: drop-shadow(0 0 22px rgba(255, 180, 90, 0.4))
+    drop-shadow(0 0 4px rgba(255, 220, 160, 0.3));
 }
 @media (prefers-reduced-motion: reduce) {
   .signature {
