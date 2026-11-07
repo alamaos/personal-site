@@ -51,15 +51,14 @@ body::before {
 @keyframes signature-fade {
   from {
     opacity: 0;
-    transform: rotate(-3deg) translateY(8px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: rotate(-3deg) translateY(0);
+    transform: translateY(0);
   }
 }
 .signature {
-  transform-origin: left center;
   animation: signature-fade 1.4s ease-out 0.3s both;
   filter: drop-shadow(0 0 22px rgba(255, 180, 90, 0.4))
     drop-shadow(0 0 4px rgba(255, 220, 160, 0.3));
@@ -67,7 +66,6 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   .signature {
     animation: none;
-    transform: rotate(-3deg);
   }
 }
 
