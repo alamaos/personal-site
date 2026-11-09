@@ -40,7 +40,7 @@ export default async function Home() {
       </nav>
 
       {/* Section 1 — Hero */}
-      <section className="flex min-h-[calc(100svh-5rem)] flex-col justify-center py-16">
+      <section className="snap flex min-h-[calc(100svh-5rem)] flex-col justify-center py-16">
         <h1 className="font-serif italic text-6xl leading-[0.95] tracking-tight sm:text-8xl md:text-[128px] md:leading-[0.92]">
           Hei. Olen <em className="font-serif italic text-accent">Oskari.</em>
         </h1>
@@ -58,7 +58,7 @@ export default async function Home() {
       </section>
 
       {/* Section 2 — Thesis */}
-      <section className="flex min-h-[100svh] items-center py-24">
+      <section className="snap flex min-h-[100svh] items-center py-24">
         <Reveal>
           <p className="max-w-[18ch] font-serif italic text-5xl leading-[1.05] tracking-tight text-foreground sm:text-7xl md:text-[96px] md:leading-[0.96]">
             Työni on
@@ -69,7 +69,7 @@ export default async function Home() {
       </section>
 
       {/* Section 3 — Work in progress */}
-      <section className="flex min-h-[100svh] flex-col justify-center py-24">
+      <section className="snap flex min-h-[100svh] flex-col justify-center py-24">
         <Reveal>
           <div className="mb-10 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-fg-muted">
             <span>Työn alla</span>
@@ -102,7 +102,7 @@ export default async function Home() {
       </section>
 
       {/* Section 4 — Contact */}
-      <section className="flex min-h-[100svh] flex-col justify-center py-24">
+      <section className="snap flex min-h-[100svh] flex-col justify-center py-24">
         <Reveal>
           <h2 className="font-serif italic text-5xl leading-[1.05] tracking-tight sm:text-7xl md:text-[96px]">
             Ota <em className="font-serif italic text-accent">yhteyttä.</em>

@@ -27,6 +27,21 @@
   --font-script: var(--font-script);
 }
 
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+}
+.snap {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
 body {
   background: var(--bg);
   color: var(--fg);
