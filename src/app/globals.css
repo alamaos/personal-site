@@ -47,20 +47,21 @@ body::before {
   pointer-events: none;
 }
 
-/* Signature: each sub-path fades in staggered by horizontal order,
-   so the strokes appear in the order a hand would write them. */
-@keyframes ink-in {
-  from {
-    opacity: 0;
-    transform: translateY(2px);
-  }
+/* Signature: each sub-path first draws its outline with stroke-dashoffset,
+   then fills in. Sub-paths are staggered by horizontal order so the
+   strokes appear in writing order, not all at once. */
+@keyframes draw-outline {
   to {
-    opacity: 1;
-    transform: translateY(0);
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fill-in {
+  to {
+    fill-opacity: 1;
   }
 }
 .signature {
-  width: min(360px, 80%);
+  width: min(380px, 85%);
   color: var(--accent);
   filter: drop-shadow(0 0 22px rgba(255, 180, 90, 0.4))
     drop-shadow(0 0 4px rgba(255, 220, 160, 0.3));
@@ -73,16 +74,23 @@ body::before {
 }
 .signature svg path {
   fill: currentColor;
-  opacity: 0;
-  transform-origin: center;
-  animation: ink-in 0.28s ease-out forwards;
-  animation-delay: calc(var(--i, 0) * 0.11s + 0.4s);
+  fill-opacity: 0;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation:
+    draw-outline 0.55s ease-out forwards,
+    fill-in 0.25s ease-out forwards;
+  animation-delay:
+    calc(var(--i, 0) * 0.12s + 0.4s),
+    calc(var(--i, 0) * 0.12s + 0.75s);
 }
 @media (prefers-reduced-motion: reduce) {
   .signature svg path {
-    opacity: 1;
+    fill-opacity: 1;
+    stroke-dashoffset: 0;
     animation: none;
-    transform: none;
   }
 }
 

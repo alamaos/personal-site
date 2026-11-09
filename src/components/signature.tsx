@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { SignatureClient } from "./signature-client";
 
 type Props = {
   className?: string;
@@ -11,12 +12,5 @@ export async function Signature({ className }: Props) {
     path.join(process.cwd(), "public", "signature.svg"),
     "utf8",
   );
-  return (
-    <div
-      className={className}
-      role="img"
-      aria-label="Allekirjoitus: Oskari Alamäki"
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
-  );
+  return <SignatureClient svg={svg} className={className} />;
 }
