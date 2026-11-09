@@ -47,27 +47,42 @@ body::before {
   pointer-events: none;
 }
 
-/* Signature: draw it on screen left-to-right like a hand writing it */
-@keyframes signature-draw {
+/* Signature: each sub-path fades in staggered by horizontal order,
+   so the strokes appear in the order a hand would write them. */
+@keyframes ink-in {
   from {
-    clip-path: inset(0 100% 0 0);
-    -webkit-clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: translateY(2px);
   }
   to {
-    clip-path: inset(0 0 0 0);
-    -webkit-clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 .signature {
-  animation: signature-draw 2.6s cubic-bezier(0.65, 0, 0.35, 1) 0.6s both;
+  width: min(360px, 80%);
+  color: var(--accent);
   filter: drop-shadow(0 0 22px rgba(255, 180, 90, 0.4))
     drop-shadow(0 0 4px rgba(255, 220, 160, 0.3));
 }
+.signature svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.signature svg path {
+  fill: currentColor;
+  opacity: 0;
+  transform-origin: center;
+  animation: ink-in 0.28s ease-out forwards;
+  animation-delay: calc(var(--i, 0) * 0.11s + 0.4s);
+}
 @media (prefers-reduced-motion: reduce) {
-  .signature {
+  .signature svg path {
+    opacity: 1;
     animation: none;
-    clip-path: none;
-    -webkit-clip-path: none;
+    transform: none;
   }
 }
 

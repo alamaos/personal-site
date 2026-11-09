@@ -125,12 +125,11 @@ async function main() {
   });
   console.log(`Ink pixels: ${inkCount}`);
 
-  // Close small gaps first (dilation then erosion) so skeleton isn't torn by ink breaks
-  let mask = dilate(binary, width, height, 4);
-  // Erode: a pixel stays only if all neighbors within radius are also ink
+  // Light closing — bridges small ink gaps without manufacturing side-branches
+  let mask = dilate(binary, width, height, 2);
   {
     const eroded = new Uint8Array(mask.length);
-    const r = 4;
+    const r = 2;
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         let ok = true;
@@ -154,16 +153,10 @@ async function main() {
     mask = eroded;
   }
 
-  // Skeletonize
-  const skeleton = skeletonize(mask, width, height);
-
-  // Uniform dilation on the skeleton — this is what makes the stroke even
-  const STROKE_RADIUS = 2;
-  const uniform = dilate(skeleton, width, height, STROKE_RADIUS);
-
-  // Write final alpha back to image
+  // Write the closed binary back — potrace will handle smoothing to bezier polygons.
+  // No skeletonization: it introduces side-branches on round letters like O.
   img.scan(0, 0, width, height, function (x, y, idx) {
-    if (uniform[y * width + x] === 255) {
+    if (mask[y * width + x] === 255) {
       this.bitmap.data[idx] = 0;
       this.bitmap.data[idx + 1] = 0;
       this.bitmap.data[idx + 2] = 0;
@@ -226,7 +219,7 @@ async function main() {
   console.log(`Wrote ${outputPath}: ${img.bitmap.width}x${img.bitmap.height}`);
 
   // Vectorize to SVG for smooth, scalable curves
-  const svg = await traceAsync(outputPath, {
+  const rawSvg = await traceAsync(outputPath, {
     threshold: 128,
     turdSize: 6,
     alphaMax: 1.3,
@@ -236,7 +229,45 @@ async function main() {
     background: "transparent",
     blackOnWhite: true,
   });
-  await writeFile(svgOutputPath, svg);
+
+  // Split the single potrace path into sub-paths (each `M...` through next `M`),
+  // sort them by horizontal position, and emit one <path> per sub-path with
+  // --i set so CSS can stage them in writing order.
+  const vb = rawSvg.match(/viewBox="([^"]+)"/)?.[1] ?? "0 0 1363 369";
+  const widthAttr = rawSvg.match(/width="([^"]+)"/)?.[1] ?? "1363";
+  const heightAttr = rawSvg.match(/height="([^"]+)"/)?.[1] ?? "369";
+  const dAttrs = [...rawSvg.matchAll(/d="([^"]+)"/g)].map((m) => m[1]);
+
+  const subpaths = [];
+  for (const d of dAttrs) {
+    const segments = d.split(/(?=M\s)/).filter((s) => s.trim());
+    for (const seg of segments) {
+      const nums = [...seg.matchAll(/-?\d+(?:\.\d+)?/g)].map((m) =>
+        parseFloat(m[0])
+      );
+      // Rough bbox: assume x is every other number starting at 0
+      let minX = Infinity;
+      let maxX = -Infinity;
+      for (let i = 0; i < nums.length; i += 2) {
+        if (nums[i] < minX) minX = nums[i];
+        if (nums[i] > maxX) maxX = nums[i];
+      }
+      if (!Number.isFinite(minX)) continue;
+      subpaths.push({ d: seg.trim(), midX: (minX + maxX) / 2 });
+    }
+  }
+  subpaths.sort((a, b) => a.midX - b.midX);
+  console.log(`Sub-paths: ${subpaths.length}`);
+
+  const pathsXml = subpaths
+    .map(
+      (s, i) =>
+        `  <path d="${s.d.replace(/"/g, "&quot;")}" style="--i:${i}" />`
+    )
+    .join("\n");
+  const styled = `<svg xmlns="http://www.w3.org/2000/svg" width="${widthAttr}" height="${heightAttr}" viewBox="${vb}">\n${pathsXml}\n</svg>\n`;
+
+  await writeFile(svgOutputPath, styled);
   console.log(`Wrote ${svgOutputPath}`);
 }
 

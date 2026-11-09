@@ -1,3 +1,5 @@
+import { Signature } from "@/components/signature";
+
 const projects = [
   {
     slug: "golf-putting",
@@ -19,7 +21,7 @@ const projects = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="mx-auto w-full max-w-5xl px-6 pt-6 pb-16 sm:px-10">
       <nav className="flex items-center justify-between gap-4 border-b border-rule py-5 text-sm text-fg-muted">
@@ -55,23 +57,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div
-          role="img"
-          aria-label="Allekirjoitus: Oskari Alamäki"
-          className="signature mt-10 bg-accent"
-          style={{
-            width: "min(360px, 80%)",
-            aspectRatio: "1363 / 369",
-            maskImage: "url(/signature.svg)",
-            maskSize: "contain",
-            maskRepeat: "no-repeat",
-            maskPosition: "left center",
-            WebkitMaskImage: "url(/signature.svg)",
-            WebkitMaskSize: "contain",
-            WebkitMaskRepeat: "no-repeat",
-            WebkitMaskPosition: "left center",
-          }}
-        />
+        <Signature className="signature mt-10" />
       </section>
 
       <section id="tyot" className="mt-24 sm:mt-32">
