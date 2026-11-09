@@ -1,4 +1,7 @@
 import Jimp from "jimp";
+import potrace from "potrace";
+import { promisify } from "node:util";
+import { writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -6,6 +9,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = join(__dirname, "..");
 const inputPath = join(projectRoot, "public", "signature-source.jpg");
 const outputPath = join(projectRoot, "public", "signature.png");
+const svgOutputPath = join(projectRoot, "public", "signature.svg");
+const traceAsync = promisify(potrace.trace);
 
 /**
  * Zhang–Suen skeletonization: reduce a binary region to a 1-pixel skeleton.
@@ -219,6 +224,20 @@ async function main() {
 
   await img.writeAsync(outputPath);
   console.log(`Wrote ${outputPath}: ${img.bitmap.width}x${img.bitmap.height}`);
+
+  // Vectorize to SVG for smooth, scalable curves
+  const svg = await traceAsync(outputPath, {
+    threshold: 128,
+    turdSize: 6,
+    alphaMax: 1.3,
+    optTolerance: 0.2,
+    optCurve: true,
+    color: "#000",
+    background: "transparent",
+    blackOnWhite: true,
+  });
+  await writeFile(svgOutputPath, svg);
+  console.log(`Wrote ${svgOutputPath}`);
 }
 
 main().catch((err) => {

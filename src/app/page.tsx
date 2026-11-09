@@ -62,11 +62,11 @@ export default function Home() {
           style={{
             width: "min(360px, 80%)",
             aspectRatio: "1363 / 369",
-            maskImage: "url(/signature.png)",
+            maskImage: "url(/signature.svg)",
             maskSize: "contain",
             maskRepeat: "no-repeat",
             maskPosition: "left center",
-            WebkitMaskImage: "url(/signature.png)",
+            WebkitMaskImage: "url(/signature.svg)",
             WebkitMaskSize: "contain",
             WebkitMaskRepeat: "no-repeat",
             WebkitMaskPosition: "left center",
