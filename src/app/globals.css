@@ -73,22 +73,16 @@ body::before {
   overflow: visible;
 }
 .signature svg path {
-  fill: currentColor;
-  fill-opacity: 0;
+  fill: none;
   stroke: currentColor;
-  stroke-width: 3;
+  stroke-width: 6;
   stroke-linecap: round;
   stroke-linejoin: round;
-  animation:
-    draw-outline 0.55s ease-out forwards,
-    fill-in 0.25s ease-out forwards;
-  animation-delay:
-    calc(var(--i, 0) * 0.12s + 0.4s),
-    calc(var(--i, 0) * 0.12s + 0.75s);
+  animation: draw-outline 0.7s ease-out forwards;
+  animation-delay: calc(var(--i, 0) * 0.14s + 0.4s);
 }
 @media (prefers-reduced-motion: reduce) {
   .signature svg path {
-    fill-opacity: 1;
     stroke-dashoffset: 0;
     animation: none;
   }
